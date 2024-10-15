@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool Techie Password Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+        .binary-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .binary-bg::before {
+            content: "10101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            right: -50%;
+            bottom: -50%;
+            transform: rotate(30deg);
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: rgba(0, 255, 0, 0.1);
+            white-space: nowrap;
+            line-height: 1.5;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .content-wrapper {
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: rgba(42, 42, 42, 0.9);
+            border: 1px solid #00ff00;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            background-color: #00ff00;
+            border-color: #00ff00;
+            color: #1a1a1a;
+        }
+        .btn-primary:hover {
+            background-color: #00cc00;
+            border-color: #00cc00;
+            color: #1a1a1a;
+        }
+        .form-control, .form-select {
+            background-color: #3a3a3a;
+            border-color: #00ff00;
+            color: #00ff00;
+            margin-bottom: 20px;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #3a3a3a;
+            border-color: #00ff00;
+            color: #00ff00;
+            box-shadow: 0 0 0 0.25rem rgba(0, 255, 0, 0.25);
+        }
+        #passwordSuggestions {
+            background-color: rgba(42, 42, 42, 0.9);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .password-item {
+            background-color: rgba(58, 58, 58, 0.9);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .signature {
+            text-align: center;
+            margin-top: 30px;
+            font-style: italic;
+            color: #00ff00;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="binary-bg"></div>
+    <div class="main-container">
+        <div class="content-wrapper">
+            <h1 class="text-center mb-5"><i class="fas fa-lock me-3"></i>Cool Techie Password Generator</h1>
+
+            <div class="signature">Made by Lunga</div>
+
+            <div></div>
+            <div class="card">
+                <div class="card-body">
+                    <form id="passwordForm">
+                        <div class="mb-4">
+                            <label for="appType" class="form-label"><i class="fas fa-globe me-2"></i>Type of App/Website:</label>
+                            <select class="form-select" id="appType" required>
+                                <option value="">Select an option</option>
+                                <option value="social">Social Media</option>
+                                <option value="banking">Banking</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="gaming">Gaming</option>
+                                <option value="streaming">Streaming</option>
+                                <option value="email">Email</option>
+                                <option value="work">Work-related</option>
+                                <option value="dating">Dating</option>
+                                <option value="fitness">Fitness</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="passwordLength" class="form-label"><i class="fas fa-ruler me-2"></i>Password Length:</label>
+                            <input type="number" class="form-control" id="passwordLength" min="8" max="32" value="16" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="includeNumbers" class="form-label"><i class="fas fa-hashtag me-2"></i>Include Numbers:</label>
+                            <select class="form-select" id="includeNumbers" required>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="includeSymbols" class="form-label"><i class="fas fa-at me-2"></i>Include Symbols:</label>
+                            <select class="form-select" id="includeSymbols" required>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-magic me-2"></i>Generate Cool Passwords!</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="passwordSuggestions" style="display: none;">
+                <h2 class="text-center mb-4"><i class="fas fa-key me-3"></i>Your Cool Techie Passwords</h2>
+                <div id="passwordList"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#passwordForm').on('submit', function(e) {
+                e.preventDefault();
+                generatePasswords();
+            });
+
+            function generatePasswords() {
+                const appType = $('#appType').val();
+                const passwordLength = parseInt($('#passwordLength').val());
+                const includeNumbers = $('#includeNumbers').val() === 'yes';
+                const includeSymbols = $('#includeSymbols').val() === 'yes';
+
+                const passwords = [];
+                for (let i = 0; i < 5; i++) {
+                    passwords.push(generateCoolPassword(appType, passwordLength, includeNumbers, includeSymbols));
+                }
+
+                displayPasswords(passwords);
+            }
+
+            function generateCoolPassword(appType, length, includeNumbers, includeSymbols) {
+                const coolWords = {
+                    social: ['Tweet', 'Gram', 'Book', 'Snap', 'Tik'],
+                    banking: ['Cash', 'Coin', 'Bank', 'Vault', 'Gold'],
+                    shopping: ['Cart', 'Shop', 'Buy', 'Deal', 'Sale'],
+                    gaming: ['Loot', 'Frag', 'Noob', 'Pwn', 'Aimbot'],
+                    streaming: ['Binge', 'Stream', 'Show', 'Flick', 'Tube'],
+                    email: ['Inbox', 'Send', 'Mail', 'Spam', 'Reply'],
+                    work: ['Boss', 'Job', 'Grind', 'Hustle', 'Office'],
+                    dating: ['Match', 'Swipe', 'Love', 'Heart', 'Date'],
+                    fitness: ['Lift', 'Run', 'Gym', 'Flex', 'Sweat'],
+                    other: ['Cyber', 'Hack', 'Tech', 'Nerd', 'Geek']
+                };
+
+                const coolWord = coolWords[appType][Math.floor(Math.random() * coolWords[appType].length)];
+                const leetSpeak = {
+                    'a': '4', 'e': '3', 'i': '1', 'o': '0', 's': '5', 't': '7'
+                };
+
+                let password = coolWord + Math.floor(Math.random() * 1000);
+                password = password.split('').map(char => leetSpeak[char.toLowerCase()] || char).join('');
+
+                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                const numbers = '0123456789';
+                const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+                let allChars = chars;
+                if (includeNumbers) allChars += numbers;
+                if (includeSymbols) allChars += symbols;
+
+                while (password.length < length) {
+                    password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+                }
+
+                return password;
+            }
+
+            function displayPasswords(passwords) {
+                const $suggestions = $('#passwordSuggestions');
+                const $passwordList = $('#passwordList');
+                $passwordList.empty();
+                $suggestions.show();
+
+                passwords.forEach((password, index) => {
+                    const emoji = ['🔑', '🗝️', '🔐', '🔒', '🛡️'][index];
+                    $passwordList.append(`<div class="password-item">${emoji} ${password}</div>`);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
